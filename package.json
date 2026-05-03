@@ -1,0 +1,27 @@
+{
+  "name": "leadflow",
+  "version": "1.0.0",
+  "description": "LeadFlow — Business discovery, website generation & outreach CRM",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "server": "nodemon backend/server.js",
+    "dev": "nodemon backend/server.js",
+    "scrape": "python scraper/scraper.py"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "csv-parse": "^6.2.1",
+    "dotenv": "^16.6.1",
+    "express": "^4.22.1",
+    "express-rate-limit": "^7.2.0",
+    "helmet": "^7.1.0",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "nedb-promises": "^6.2.3",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>LeadFlow — Business Discovery & Outreach CRM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Sora:wght@400;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<link rel="stylesheet" href="css/app.css"/>
+</head>
+<body>
+
+<!-- ══ SIDEBAR ══ -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar__top">
+    <div class="sidebar__logo">
+      <div class="sidebar__logo-icon"><i class="fa-solid fa-bolt-lightning"></i></div>
+      <div>
+        <div class="sidebar__logo-name">LeadFlow</div>
+        <div class="sidebar__logo-sub">CRM & Outreach</div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="sidebar__nav">
+    <a class="sidebar__link active" data-page="dashboard" href="#">
+      <i class="fa-solid fa-chart-tree-map"></i><span>Dashboard</span>
+    </a>
+    <a class="sidebar__link" data-page="leads" href="#">
+      <i class="fa-solid fa-users"></i><span>Leads</span>
+      <span class="sidebar__badge" id="badge-leads">0</span>
+    </a>
+    <a class="sidebar__link" data-page="discover" href="#">
+      <i class="fa-solid fa-magnifying-glass-location"></i><span>Discover</span>
+    </a>
+    <a class="sidebar__link" data-page="sites" href="#">
+      <i class="fa-solid fa-globe"></i><span>Generated Sites</span>
+    </a>
+    <a class="sidebar__link" data-page="outreach" href="#">
+      <i class="fa-brands fa-whatsapp"></i><span>Outreach</span>
+      <span class="sidebar__badge sidebar__badge--green" id="badge-outreach">0</span>
+    </a>
+    <a class="sidebar__link" data-page="templates" href="#">
+      <i class="fa-solid fa-layer-group"></i><span>Templates</span>
+    </a>
+    <a class="sidebar__link" data-page="settings" href="#">
+      <i class="fa-solid fa-gear"></i><span>Settings</span>
+    </a>
+  </nav>
+
+  <div class="sidebar__bottom">
+    <div class="sidebar__theme-toggle" id="themeToggle">
+      <i class="fa-solid fa-moon"></i>
+      <span>Dark mode</span>
+    </div>
+  </div>
+</aside>
+
+<!-- ══ MOBILE TOPBAR ══ -->
+<div class="topbar">
+  <button class="topbar__menu" id="menuBtn"><i class="fa-solid fa-bars"></i></button>
+  <div class="topbar__logo">LeadFlow</div>
+  <div></div>
+</div>
+
+<!-- ══ MAIN CONTENT ══ -->
+<main class="main" id="main">
+
+  <!-- ─ DASHBOARD ─ -->
+  <div class="page active" id="page-dashboard">
+    <div class="page__header">
+      <div>
+        <h1 class="page__title">Dashboard</h1>
+        <p class="page__subtitle">Your pipeline at a glance</p>
+      </div>
+      <button class="btn btn--primary" onclick="App.go('discover')">
+        <i class="fa-solid fa-plus"></i> Find Leads
+      </button>
+    </div>
+
+    <!-- Stats grid -->
+    <div class="stats-grid" id="statsGrid">
+      <div class="stat-card"><div class="stat-card__icon stat-card__icon--blue"><i class="fa-solid fa-users"></i></div><div class="stat-card__val" id="stat-total">—</div><div class="stat-card__label">Total Leads</div></div>
+      <div class="stat-card"><div class="stat-card__icon stat-card__icon--amber"><i class="fa-solid fa-triangle-exclamation"></i></div><div class="stat-card__val" id="stat-nosite">—</div><div class="stat-card__label">No Website</div></div>
+      <div class="stat-card"><div class="stat-card__icon stat-card__icon--purple"><i class="fa-solid fa-globe"></i></div><div class="stat-card__val" id="stat-sites">—</div><div class="stat-card__label">Sites Generated</div></div>
+      <div class="stat-card"><div class="stat-card__icon stat-card__icon--green"><i class="fa-brands fa-whatsapp"></i></div><div class="stat-card__val" id="stat-sent">—</div><div class="stat-card__label">Messages Sent</div></div>
+      <div class="stat-card"><div class="stat-card__icon stat-card__icon--teal"><i class="fa-solid fa-reply"></i></div><div class="stat-card__val" id="stat-replied">—</div><div class="stat-card__label">Replies</div></div>
+      <div class="stat-card"><div class="stat-card__icon stat-card__icon--rose"><i class="fa-solid fa-handshake"></i></div><div class="stat-card__val" id="stat-converted">—</div><div class="stat-card__label">Converted</div></div>
+    </div>
+
+    <!-- Two-column below stats -->
+    <div class="dash-grid">
+
+      <!-- Top opportunities -->
+      <div class="card">
+        <div class="card__header">
+          <h3 class="card__title"><i class="fa-solid fa-fire-flame-curved"></i> Top Opportunities</h3>
+          <a class="card__link" href="#" onclick="App.go('leads');return false">View all</a>
+        </div>
+        <div id="topOpportunities" class="opp-list">
+          <div class="empty-state"><i class="fa-solid fa-magnifying-glass"></i><p>No leads yet. Start by finding businesses.</p></div>
+        </div>
+      </div>
+
+      <!-- Recent activity -->
+      <div class="card">
+        <div class="card__header">
+          <h3 class="card__title"><i class="fa-solid fa-clock-rotate-left"></i> Recent Activity</h3>
+        </div>
+        <div id="recentActivity" class="activity-list">
+          <div class="empty-state"><i class="fa-solid fa-inbox"></i><p>No activity yet.</p></div>
+        </div>
+      </div>
+
+      <!-- Niche breakdown -->
+      <div class="card">
+        <div class="card__header">
+          <h3 class="card__title"><i class="fa-solid fa-chart-pie"></i> Leads by Niche</h3>
+        </div>
+        <div id="nicheBreakdown" class="niche-bars"></div>
+      </div>
+
+      <!-- Pipeline funnel -->
+      <div class="card">
+        <div class="card__header">
+          <h3 class="card__title"><i class="fa-solid fa-filter"></i> Pipeline Status</h3>
+        </div>
+        <div id="pipelineStatus" class="pipeline-list"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ─ LEADS ─ -->
+  <div class="page" id="page-leads">
+    <div class="page__header">
+      <div>
+        <h1 class="page__title">Leads</h1>
+        <p class="page__subtitle">All discovered businesses</p>
+      </div>
+      <button class="btn btn--primary" onclick="Leads.openAddModal()">
+        <i class="fa-solid fa-plus"></i> Add Lead
+      </button>
+    </div>
+
+    <!-- Filters -->
+    <div class="filter-bar">
+      <div class="search-box">
+        <i class="fa-solid fa-search"></i>
+        <input type="text" id="leadsSearch" placeholder="Search by name, phone, city…" oninput="Leads.load()"/>
+      </div>
+      <select id="filterStatus" onchange="Leads.load()">
+        <option value="">All Statuses</option>
+        <option value="new">New</option>
+        <option value="enriched">Enriched</option>
+        <option value="outreach_sent">Outreach Sent</option>
+        <option value="responded">Responded</option>
+        <option value="converted">Converted</option>
+        <option value="lost">Lost</option>
+      </select>
+      <select id="filterNiche" onchange="Leads.load()">
+        <option value="">All Niches</option>
+        <option value="salon">Salon & Beauty</option>
+        <option value="restaurant">Restaurant</option>
+        <option value="clinic">Clinic & Health</option>
+        <option value="retail">Retail Shop</option>
+        <option value="education">Education</option>
+        <option value="hospitality">Hospitality</option>
+        <option value="fitness">Fitness</option>
+        <option value="plumber">Plumbing & Heating</option>
+        <option value="locksmith">Locksmith & Security</option>
+        <option value="contractor">Construction & Roofing</option>
+  
+        <option value="general">General</option>
+      </select>
+      <select id="filterWebsite" onchange="Leads.load()">
+        <option value="">All</option>
+        <option value="0">No Website</option>
+        <option value="1">Has Website</option>
+      </select>
+    </div>
+
+    <div id="leadsTable" class="leads-table-wrap">
+      <div class="empty-state"><i class="fa-solid fa-users"></i><p>Loading leads…</p></div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination" id="leadsPagination"></div>
+  </div>
+
+  <!-- ─ DISCOVER ─ -->
+  <div class="page" id="page-discover">
+    <div class="page__header">
+      <div>
+        <h1 class="page__title">Discover Businesses</h1>
+        <p class="page__subtitle">Find small businesses without a web presence</p>
+      </div>
+    </div>
+
+    <div class="discover-layout">
+      <!-- Search form -->
+      <div class="card discover-card">
+        <h3 class="card__title" style="margin-bottom:20px"><i class="fa-solid fa-magnifying-glass-location"></i> Search Parameters</h3>
+
+        <div class="form-group">
+          <label class="form-label">Business Type / Category</label>
+          <input class="form-control" type="text" id="discoverQuery" placeholder="e.g. hair salon, restaurant, pharmacy…"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">City</label>
+          <input class="form-control" type="text" id="discoverCity" placeholder="e.g. Lagos, Abuja, Port Harcourt…"/>
+        </div>
+
+        <div class="quick-tags">
+          <p class="form-label">Quick searches</p>
+          <div class="tag-row">
+            <button class="tag" onclick="Discover.quickSearch('hair salon','Lagos')">Hair Salons Lagos</button>
+            <button class="tag" onclick="Discover.quickSearch('restaurant','Abuja')">Restaurants Abuja</button>
+            <button class="tag" onclick="Discover.quickSearch('pharmacy','Lagos')">Pharmacies Lagos</button>
+            <button class="tag" onclick="Discover.quickSearch('boutique','Port Harcourt')">Boutiques PH</button>
+            <button class="tag" onclick="Discover.quickSearch('barber','Ibadan')">Barbers Ibadan</button>
+            <button class="tag" onclick="Discover.quickSearch('clinic','Lagos')">Clinics Lagos</button>
+          </div>
+        </div>
+
+        <button class="btn btn--primary btn--full" id="discoverBtn" onclick="Discover.run()">
+          <i class="fa-solid fa-magnifying-glass"></i> Find Businesses
+        </button>
+      </div>
+
+      <!-- Jobs history -->
+      <div class="card">
+        <div class="card__header">
+          <h3 class="card__title"><i class="fa-solid fa-list-check"></i> Recent Searches</h3>
+          <button class="btn btn--ghost btn--sm" onclick="Discover.loadJobs()"><i class="fa-solid fa-rotate"></i></button>
+        </div>
+        <div id="jobsList" class="jobs-list">
+          <div class="empty-state small"><i class="fa-solid fa-clock"></i><p>No searches yet.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─ SITES ─ -->
+  <div class="page" id="page-sites">
+    <div class="page__header">
+      <div>
+        <h1 class="page__title">Generated Sites</h1>
+        <p class="page__subtitle">One-pagers built for your leads</p>
+      </div>
+    </div>
+    <div id="sitesGrid" class="sites-grid">
+      <div class="empty-state"><i class="fa-solid fa-globe"></i><p>No sites generated yet. Open a lead and click "Generate Site".</p></div>
+    </div>
+  </div>
+
+  <!-- ─ OUTREACH ─ -->
+  <div class="page" id="page-outreach">
+    <div class="page__header">
+      <div>
+        <h1 class="page__title">Outreach</h1>
+        <p class="page__subtitle">Track your messages and responses</p>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <select id="outreachFilter" onchange="OutreachPage.load()">
+        <option value="">All Messages</option>
+        <option value="draft">Draft</option>
+        <option value="sent">Sent</option>
+        <option value="replied">Replied</option>
+      </select>
+    </div>
+
+    <div id="outreachList" class="outreach-list">
+      <div class="empty-state"><i class="fa-brands fa-whatsapp"></i><p>No outreach messages yet.</p></div>
+    </div>
+  </div>
+
+  <!-- ─ TEMPLATES ─ -->
+  <div class="page" id="page-templates">
+    <div class="page__header">
+      <div>
+        <h1 class="page__title">Website Templates</h1>
+        <p class="page__subtitle">Pre-built niche templates for instant site generation</p>
+      </div>
+    </div>
+    <div id="templatesGrid" class="templates-grid">
+      <div class="empty-state"><i class="fa-solid fa-layer-group"></i><p>Loading templates…</p></div>
+    </div>
+  </div>
+
+  <!-- ─ SETTINGS ─ -->
+  <div class="page" id="page-settings">
+    <div class="page__header">
+      <div>
+        <h1 class="page__title">Settings</h1>
+        <p class="page__subtitle">Your profile & app preferences</p>
+      </div>
+    </div>
+    <div class="settings-grid">
+      <div class="card">
+        <h3 class="card__title" style="margin-bottom:20px">Your Info</h3>
+        <div class="form-group"><label class="form-label">Your Name</label><input class="form-control" id="s-name" type="text" placeholder="e.g. John Doe"/></div>
+        <div class="form-group"><label class="form-label">WhatsApp Number</label><input class="form-control" id="s-wa" type="text" placeholder="+234 800 000 0000"/></div>
+        <div class="form-group"><label class="form-label">Default City</label><input class="form-control" id="s-city" type="text" placeholder="Lagos"/></div>
+      </div>
+      <div class="card">
+        <h3 class="card__title" style="margin-bottom:20px">Outreach Limits</h3>
+        <div class="form-group"><label class="form-label">Daily Message Limit</label><input class="form-control" id="s-limit" type="number" min="1" max="100"/></div>
+        <div class="form-group"><label class="form-label">Delay Between Messages (seconds)</label><input class="form-control" id="s-delay" type="number" min="10"/></div>
+        <div class="info-box"><i class="fa-solid fa-circle-info"></i> Keep daily limits below 30 to avoid appearing spammy. WhatsApp flags accounts sending identical messages in bulk.</div>
+      </div>
+      <div style="grid-column:1/-1;display:flex;justify-content:flex-end;">
+        <button class="btn btn--primary" onclick="Settings.save()"><i class="fa-solid fa-floppy-disk"></i> Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ══ LEAD DETAIL DRAWER ══ -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="Drawer.close()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer__header">
+    <div>
+      <h2 class="drawer__title" id="drawerTitle">Lead Details</h2>
+      <p class="drawer__subtitle" id="drawerSubtitle"></p>
+    </div>
+    <button class="drawer__close" onclick="Drawer.close()"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="drawer__body" id="drawerBody">
+    <!-- Injected by JS -->
+  </div>
+</div>
+
+<!-- ══ ADD LEAD MODAL ══ -->
+<div class="modal-overlay" id="addLeadOverlay" onclick="if(event.target===this)Leads.closeAddModal()">
+  <div class="modal">
+    <div class="modal__header">
+      <h3>Add Lead Manually</h3>
+      <button onclick="Leads.closeAddModal()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal__body">
+      <div class="form-group"><label class="form-label">Business Name *</label><input class="form-control" id="ml-name" type="text" placeholder="e.g. Grace Beauty Salon"/></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Category</label><input class="form-control" id="ml-cat" type="text" placeholder="e.g. hair salon"/></div>
+        <div class="form-group"><label class="form-label">City</label><input class="form-control" id="ml-city" type="text" placeholder="Lagos"/></div>
+      </div>
+      <div class="form-group"><label class="form-label">Phone</label><input class="form-control" id="ml-phone" type="text" placeholder="+234 800 000 0000"/></div>
+      <div class="form-group"><label class="form-label">Address</label><input class="form-control" id="ml-addr" type="text" placeholder="Street address"/></div>
+      <div class="form-group"><label class="form-label">Existing Website (if any)</label><input class="form-control" id="ml-web" type="text" placeholder="https://…"/></div>
+      <div class="form-group"><label class="form-label">Notes</label><textarea class="form-control" id="ml-notes" rows="2" placeholder="Any notes about this lead…"></textarea></div>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn--ghost" onclick="Leads.closeAddModal()">Cancel</button>
+      <button class="btn btn--primary" onclick="Leads.submitAdd()">Add Lead</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ GENERATE SITE MODAL ══ -->
+<div class="modal-overlay" id="genSiteOverlay" onclick="if(event.target===this)Sites.closeGenModal()">
+  <div class="modal">
+    <div class="modal__header">
+      <h3>Generate Website</h3>
+      <button onclick="Sites.closeGenModal()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal__body">
+      <p style="margin-bottom:16px;color:var(--color-text-secondary)">Choose a template that matches this business's niche. The site will be generated and previewed instantly.</p>
+      <div id="templateSelector" class="template-selector"></div>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn--ghost" onclick="Sites.closeGenModal()">Cancel</button>
+      <button class="btn btn--primary" id="genSiteBtn" onclick="Sites.generate()"><i class="fa-solid fa-wand-magic-sparkles"></i> Generate</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TOAST ══ -->
+<div class="toast" id="toast"></div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
